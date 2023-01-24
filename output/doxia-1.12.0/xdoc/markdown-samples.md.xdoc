@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 https://maven.apache.org/xsd/xdoc-2.0.xsd"><properties>
+<title>Markdown metadata title</title><author>markdown metadata author</author><date>markdown metadata date</date></properties>
+<body>
+<h1>Markdown title 1 &#x2018;===&#x2019;</h1>
+<h1>Markdown title 1 &#x2018;#&#x2019;</h1><section name="Markdown title 2 &#x2018;##&#x2019;"><subsection name="Markdown title 3 &#x2018;###&#x2019;">
+<h4>Markdown title 4 &#x2018;####&#x2019;</h4>
+<h5>Markdown title 5 &#x2018;#####&#x2019;</h5></subsection></section><section name="Table">
+<table border="0">
+<thead>
+
+<tr class="a">
+<th>head</th>
+<th>head col 2</th>
+<th>head col 3</th></tr>
+</thead><tbody>
+
+<tr class="b">
+<td>row</td>
+<td>row col 2</td>
+<td>row col 3</td></tr>
+</tbody>
+</table></section><section name="Code">
+<p>Code section can be represented with 3 backticks:</p>
+<source><code>basic 3 backticks
+</code></source>
+<p>or with 4 spaces</p>
+<source><code>code marked by 4 spaces
+</code></source>
+<p>With backticks, it can propose some syntax highlight hints:</p>
+<source><code class="language-xml">&lt;xml&gt;
+  &lt;element attrr=&quot;attribute&quot;&gt;element&lt;/element&gt;
+&lt;/xml&gt;
+</code></source></section></body></document>

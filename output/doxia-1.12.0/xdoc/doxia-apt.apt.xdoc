@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1"?><document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 https://maven.apache.org/xsd/xdoc-2.0.xsd"><properties>
+<title>Doxia APT Enhancements</title><author>Lukas Theussl
+Robert Scholte</author><date>2013-04-06</date></properties>
+<body><!-- Licensed to the Apache Software Foundation (ASF) under one--><!-- or more contributor license agreements.  See the NOTICE file--><!-- distributed with this work for additional information--><!-- regarding copyright ownership.  The ASF licenses this file--><!-- to you under the Apache License, Version 2.0 (the--><!-- "License"); you may not use this file except in compliance--><!-- with the License.  You may obtain a copy of the License at--><!----><!--   http://www.apache.org/licenses/LICENSE-2.0--><!----><!-- Unless required by applicable law or agreed to in writing,--><!-- software distributed under the License is distributed on an--><!-- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY--><!-- KIND, either express or implied.  See the License for the--><!-- specific language governing permissions and limitations--><!-- under the License.--><!-- NOTE: For help with the syntax of this file, see:--><!-- http://maven.apache.org/doxia/references/apt-format.html--><section name="Enhancements to the APT format"><!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<p>In the following we provide a list of differences/enhancements to the original <a href="./apt-format.html">APT</a> format that were incorporated in Doxia. Apart from some exceptions, these differences are usually 'backwards-compatible'. That is, any document that gets correctly processed by Aptconvert should also be a valid Doxia input file and lead to identical results when processed by a Doxia parser.</p>
+<ul>
+<li><a href="#Paragraphs_in_list_items">Paragraphs in list items</a></li>
+<li><a href="#Table_header_cells">Table header cells</a></li>
+<li><a href="#Multi-lines_cells_in_table">Multi-lines cells in table</a></li>
+<li><a href="#Anchors">Anchors</a></li>
+<li><a href="#Links">Links</a></li>
+<li><a href="#Figure_extensions">Figure extensions</a></li></ul><subsection name="<a name="Paragraphs_in_list_items">Paragraphs in list items</a>"><!--~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+<p>Contrary to the original APT parser, the Doxia APT parser does not put list items within paragraphs. Eg, the example given in the APT guide:</p><source>    * List item 1.</source>
+<p>will, for instance, produce the following html:</p><source>    &lt;li&gt;List item 1.&lt;/li&gt;</source>
+<p>To get the same result as aptconvert, use</p><source>    *
+
+      List item 1.</source>
+<p>which will produce:</p><source>    &lt;li&gt;&lt;p&gt;List item 1.&lt;/p&gt;&lt;/li&gt;</source></subsection><subsection name="<a name="Table_header_cells">Table header cells</a>"><!--~~~~~~~~~~~~~~~~~~~~-->
+<p>Header cells are defined by an additional pipe character '|' at the beginning of the cell:</p><source>*-----------+-----------+
+|| Header 1 || Header 2 |
+*-----------+-----------+
+| Cell 1    | Cell 2    |
+*-----------+-----------+</source>
+<p>produces:</p>
+<table border="1">
+<tr valign="top">
+<th align="left">Header 1</th>
+<th align="left">Header 2</th></tr>
+<tr valign="top">
+<td align="left">Cell 1</td>
+<td align="left">Cell 2</td></tr></table></subsection><subsection name="<a name="Multi-lines_cells_in_table">Multi-lines cells in table</a>"><!--~~~~~~~~~~~~~~~~~~~~-->
+<p>Since 1.1, multi-lines cells are recognized with the character '\' at the end of the cells:</p><source>*-----------+-----------+
+|| Header 1 || Header 2 |
+*-----------+-----------+
+| Cell\     | Cell 2    |
+| 1         |           |
+*-----------+-----------+</source>
+<p>produces:</p>
+<table border="1">
+<tr valign="top">
+<th align="left">Header 1</th>
+<th align="left">Header 2</th></tr>
+<tr valign="top">
+<td align="left">Cell&#xa0;<br />1</td>
+<td align="left">Cell 2</td></tr></table></subsection><subsection name="<a name="Anchors">Anchors</a>"><!--~~~~~~~~~~~~~~~~~~~-->
+<h4><a name="Anchors_for_section_titles">Anchors for section titles</a></h4>
+<p>Contrary to the original APT format, section titles are <b>not</b> implicitly defined anchors. If you want an anchor for a section title you need to define it explicitly as such:</p><source>* {Anchors for section titles}</source>
+<h4><a name="Anchor_construction">Anchor construction</a></h4>
+<p>Contrary to the original APT format, an anchor/link is <b>not</b> its text with all non alphanumeric characters stripped. Ideally, an anchor should be a valid Doxia id, ie it must begin with a letter ([A-Za-z]) and may be followed by any number of letters, digits ([0-9]), hyphens (&quot;-&quot;), underscores (&quot;_&quot;), colons (&quot;:&quot;), and periods (&quot;.&quot;). Any anchor that does not satisfy this pattern is transformed according to the following rules:</p>
+<ul>
+<li>Any whitespace at the start and end is removed</li>
+<li>If the first character is not a letter, prepend the letter 'a'</li>
+<li>Any spaces are replaced with an underscore '_'</li>
+<li>Any characters not matching the above pattern are stripped.</li></ul>
+<p>Note in particular that case is preserved in this conversation and that APT anchors and links are case-sensitive. So the anchor for the section title in the previous example would be <tt>Anchors_for_section_titles</tt>.</p></subsection><subsection name="<a name="Links">Links</a>"><!--~~~~~~~~~~~~~~~~~~~-->
+<p>In <b>Doxia-1.1</b> the notion of a '<i>local</i>' link was introduced in addition to <i>internal</i> links and <i>external</i> links.</p>
+<ul>
+<li>An <b>internal</b> link is a link to an anchor within the same source document.
+<p>In the APT format used by <b>Doxia-1.1</b>, internal links have to be valid Doxia ids, as specified in the anchors section above.</p>
+<p>Note in particular that internal links in APT do <b>not</b> start with '#'.</p></li>
+<li>A <b>local</b> link is a link to another document within the same site.
+<p>In the APT format used by <b>Doxia-1.1</b>, local links <b>have to</b> start with either <tt>./</tt> or <tt>../</tt> to distinguish them from internal links. E.g.,</p>
+<pre>  {{{doc/standalone.html}Standalone}}</pre>
+<p>is not valid, it should be</p>
+<pre>  {{{./doc/standalone.html}Standalone}}</pre>
+<p>Note in particular that the following link</p>
+<pre>  {{{standalone.html}Standalone}}</pre>
+<p>will be interpreted as an internal link (dots are valid characters in anchor names). Since you most likely meant to link to another source document, you should again prepend a &quot;./&quot;.</p></li>
+<li>An <b>external</b> link is a link that is neither local nor internal.
+<p>An external link should be a valid <a class="externalLink" href="http://www.ietf.org/rfc/rfc2396.txt">URI</a>.</p></li></ul>
+<p>Anchors are always translated to a valid id, including escaping. In some situation this can cause issues, especially when referring to a javadoc-link.<br />Since Doxia 1.4 there is support for literal anchors, by using 2 hashed (##) instead of 1. This implies that the writer is responsible for using the right URL encoding!</p>
+<pre>  {{{../apidocs/groovyx/net/http/ParserRegistry.html##parseText(org.apache.http.HttpResponse)}ParserRegistry}}</pre></subsection><subsection name="<a name="Figure_extensions">Figure extensions</a>"><!--~~~~~~~~~~~~~~~~~~~-->
+<p>Contrary to the original APT format, a figure name has to be given fully <b>with</b> extension. For instance:</p><source>[/home/joe/docs/mylogo.jpeg] Figure caption</source></subsection></section></body></document>

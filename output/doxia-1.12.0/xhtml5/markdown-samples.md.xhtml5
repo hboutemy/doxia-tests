@@ -1,0 +1,44 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Markdown metadata title</title><meta name="author" content="markdown metadata author" /><meta name="date" content="markdown metadata date" /><meta charset="ISO-8859-1"/></head>
+<body>
+<h1>Markdown title 1 &#x2018;===&#x2019;</h1>
+<h1>Markdown title 1 &#x2018;#&#x2019;</h1><section>
+<h2>Markdown title 2 &#x2018;##&#x2019;</h2><section>
+<h3>Markdown title 3 &#x2018;###&#x2019;</h3><section>
+<h4>Markdown title 4 &#x2018;####&#x2019;</h4><section>
+<h5>Markdown title 5 &#x2018;#####&#x2019;</h5></section></section></section></section><section>
+<h2>Table</h2>
+<table border="0" class="bodyTable">
+<thead>
+
+<tr class="a">
+<th>head</th>
+<th>head col 2</th>
+<th>head col 3</th></tr>
+</thead><tbody>
+
+<tr class="b">
+<td align="left">row</td>
+<td>row col 2</td>
+<td>row col 3</td></tr>
+</tbody>
+</table></section><section>
+<h2>Code</h2>
+<p>Code section can be represented with 3 backticks:</p>
+
+<div class="source">
+<pre><code>basic 3 backticks
+</code></pre></div>
+<p>or with 4 spaces</p>
+
+<div class="source">
+<pre><code>code marked by 4 spaces
+</code></pre></div>
+<p>With backticks, it can propose some syntax highlight hints:</p>
+
+<div class="source">
+<pre><code class="language-xml">&lt;xml&gt;
+  &lt;element attrr=&quot;attribute&quot;&gt;element&lt;/element&gt;
+&lt;/xml&gt;
+</code></pre></div></section></body></html>

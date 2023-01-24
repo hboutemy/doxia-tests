@@ -1,0 +1,361 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+  <?xml version="1.0" encoding="UTF-8"?><document xmlns="http://maven.apache.org/XDOC/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 https://maven.apache.org/xsd/xdoc-2.0.xsd"><properties>
+<title>
+    The Xdoc format</title><author>
+    Lukas Theussl</author></properties>
+<body>
+
+    <section name="Content">
+      <a name="Content"></a>
+      
+        
+        
+      
+<ul>
+<li><a href="#Content">Content</a></li>
+<li><a href="#The_XDoc_format">The XDoc format</a>
+<ul>
+<li><a href="#Overview">Overview</a></li>
+<li><a href="#The_XDoc_xsd">The XDoc xsd</a></li>
+<li><a href="#XDoc_Sample">XDoc Sample</a></li>
+<li><a href="#The_.3Csource.3E_tag">The &lt;source&gt; tag</a></li>
+<li><a href="#Additional_sectioning">Additional sectioning</a></li>
+<li><a href="#Referencing_sections_and_subsections">Referencing sections and subsections</a></li></ul></li>
+<li><a href="#Validation">Validation</a>
+<ul>
+<li><a href="#Don.27t_nest_block_level_elements">Don't nest block level elements</a></li>
+<li><a href="#Put_inline_elements_inside_block_level_elements">Put inline elements inside block level elements</a></li>
+<li><a href="#Right_order_of_elements_in_.3Cproperties.3E">Right order of elements in &lt;properties&gt;</a></li>
+<li><a href="#Dont_put_.3Csource.3E_inside_paragraphs">Dont put &lt;source&gt; inside paragraphs</a></li></ul></li></ul>
+    </section>
+
+    <section name="The XDoc format">
+      <a name="The_XDoc_format"></a>
+      <a name="Overview"></a>
+      <subsection name="Overview">
+        
+<p>
+          An 'xdoc' is an XML document conforming to a small and simple set of tags.
+          Xdoc was the primary documentation format in <a class="externalLink" href="http://maven.apache.org/maven-1.x/">Maven 1</a>,
+          Maven 2 largely replaced this by <a href="apt-format.html">Apt</a>, but xdoc is still supported.
+        </p>
+
+        
+<p>
+          Historically, the xdoc format can be traced back to the
+          <a class="externalLink" href="http://velocity.apache.org/anakia/devel/">Anakia</a> format, as once used by the
+          <a class="externalLink" href="http://jakarta.apache.org/">Apache Jakarta</a> project then moved
+          to <a class="externalLink" href="http://velocity.apache.org/">Velocity</a>.
+        </p>
+
+        
+<p>
+          The Maven 1 Xdoc plugin introduced a few additions to the Anakia format, they are highlighted in the
+          <a class="externalLink" href="http://maven.apache.org/maven-1.x/plugins/xdoc/reference/xdocs.html">plugin</a> documentation.
+        </p>
+      </subsection>
+
+      <a name="The_XDoc_xsd"></a>
+      <subsection name="The XDoc xsd">
+        
+<p>
+          The full documentation is available <a href="../doxia/doxia-modules/doxia-module-xdoc/xsddoc/index.html">here</a>.
+        </p>
+      </subsection>
+
+      <a name="XDoc_Sample"></a>
+      <subsection name="XDoc Sample">
+        
+<p>
+          The following is a sample XDoc document:
+        </p>
+        <source>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;document xmlns=&quot;http://maven.apache.org/XDOC/2.0&quot;
+  xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+  xsi:schemaLocation=&quot;http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd&quot;&gt;
+
+  &lt;properties&gt;
+    &lt;title&gt;Page Title&lt;/title&gt;
+    &lt;author email=&quot;user@company.com&quot;&gt;John Doe&lt;/author&gt;
+  &lt;/properties&gt;
+
+  &lt;!-- Optional HEAD element, which is copied as is into the XHTML &lt;head&gt; element --&gt;
+  &lt;head&gt;
+    &lt;meta ... /&gt;
+  &lt;/head&gt;
+
+  &lt;body&gt;
+
+    &lt;!-- The body of the document contains a number of sections --&gt;
+    &lt;section name=&quot;section 1&quot;&gt;
+
+      &lt;!-- Within sections, any XHTML can be used --&gt;
+      &lt;p&gt;Hi!&lt;/p&gt;
+
+      &lt;!-- in addition to XHTML, any number of subsections can be within a section --&gt;
+      &lt;subsection name=&quot;subsection 1&quot;&gt;
+        &lt;p&gt;Subsection!&lt;/p&gt;
+      &lt;/subsection&gt;
+
+    &lt;/section&gt;
+
+    &lt;section name=&quot;other section&quot;&gt;
+
+      &lt;!-- You can also include preformatted source blocks in the document --&gt;
+      &lt;source&gt;
+code line 1
+code line 2
+      &lt;/source&gt;
+
+    &lt;/section&gt;
+
+  &lt;/body&gt;
+
+&lt;/document&gt;</source>
+
+      </subsection>
+
+      <a name="The_source_tag"></a>
+      <subsection name="The &lt;source&gt; tag">
+        
+<p>
+        <code>&lt;source&gt;</code> tags are special.
+        Anything within this tag is rendered within a &quot;verbatim box&quot; as pre-formatted text.
+        If you are embedding other XML/XHTML markup
+        within the source tags, then you need to place a CDATA section within
+        the source section. Example:
+        </p>
+<source>&lt;source&gt;&lt;![CDATA[ content here &lt;a href=&quot;&quot;&gt;foo&lt;/a&gt;]]&gt;&lt;/source&gt;</source>
+      </subsection>
+
+      <a name="Additional_sectioning"></a>
+      <subsection name="Additional sectioning">
+        
+<p>
+          Doxia will produce <code>&lt;h2&gt;</code> and
+          <code>&lt;h3&gt;</code> headings for <code>&lt;section&gt;</code>
+          and <code>&lt;subsection&gt;</code> elements, respectively.
+          It is therefore perfectly valid to put some sub-headings
+          (<code>&lt;h4&gt;</code>, <code>&lt;h5&gt;</code>,
+          <code>&lt;h6&gt;</code>) inside a subsection. For instance,
+        </p>
+
+        <source>&lt;h4&gt;A subsubsection&lt;/h4&gt;</source>
+
+        
+<p>
+          will produce:
+        </p>
+
+        
+<h4>A subsubsection</h4>
+      </subsection>
+
+      <a name="Referencing_sections_and_subsections"></a>
+      <subsection name="Referencing sections and subsections">
+        
+<p>
+          The core doxia modules do <b>not</b> construct anchors from
+          section/subsection names. If you want to reference a section,
+          you should either provide an explicit anchor:
+        </p>
+
+        <source>&lt;a name=&quot;Section1&quot;/&gt;
+&lt;section name=&quot;Section&quot;&gt;
+
+  &lt;a name=&quot;SubSection1&quot;/&gt;
+  &lt;subsection name=&quot;SubSection&quot;&gt;
+  &lt;/subsection&gt;
+
+&lt;/section&gt;</source>
+
+        
+<p>
+          or use an <code>id</code> attribute for section and subsections
+          (note that <code>id</code>'s have to be unique within one xdoc
+          source document):
+        </p>
+
+        <source>&lt;section name=&quot;Section&quot; id=&quot;Section1&quot;&gt;
+
+  &lt;subsection name=&quot;SubSection&quot; id=&quot;SubSection1&quot;&gt;
+  &lt;/subsection&gt;
+
+&lt;/section&gt;</source>
+
+        
+<p>
+          <b>Note</b> that this differs from previous behavior, where anchors
+          were constructed from section/subsection names, replacing special
+          characters by underscores. This behavior presents two shortcomings:
+        </p>
+
+        
+<ul>
+
+          
+<li>
+            If two sections or subsections have identical names
+            (within one source document), you will get an ambiguity when
+            referencing them. Also the resulting html document will not be
+            valid XHTML. For other output formats (eg pdf), it might even be impossible
+            to generate the target document.
+          </li>
+
+          
+<li>
+            For long section titles, this leads to rather cumbersome anchor names.
+          </li>
+
+        </ul>
+
+        
+<p>
+          If automatic anchor generation is desired for a particular output format,
+          it should be implemented / overridden by the corresponding low-level Sink.
+        </p>
+
+      </subsection>
+    </section>
+
+    <section name="Validation">
+      <a name="Validation"></a>
+      
+<p>
+        Doxia is able to validate your xdoc files as described
+        <a href="../doxia/doxia-modules/doxia-module-xdoc/using-xdoc-xsd.html">here</a>.
+      </p>
+
+      
+<p>
+        Here is a list of common mistakes to be aware of:
+      </p>
+
+      <a name="Dont_nest_block_level_elements"></a>
+      <subsection name="Don't nest block level elements">
+
+        
+<p>Wrong:</p>
+
+        <source>&lt;p&gt;
+  Here's a list:
+  &lt;ul&gt;
+    &lt;li&gt;item 1&lt;/li&gt;
+    &lt;li&gt;item 2&lt;/li&gt;
+  &lt;/ul&gt;
+  of things to do.
+&lt;/p&gt;</source>
+
+        
+<p>Correct:</p>
+
+        <source>&lt;p&gt;
+  Here's a list:
+&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;item 1&lt;/li&gt;
+  &lt;li&gt;item 2&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;
+  of things to do.
+&lt;/p&gt;</source>
+
+        
+<p>
+          Typical block level elements are list elements,
+          <code>&lt;table&gt;</code>, <code>&lt;source&gt;</code>,
+          <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code> and
+          <code>&lt;pre&gt;</code>.
+        </p>
+
+      </subsection>
+
+      <a name="Put_inline_elements_inside_block_level_elements"></a>
+      <subsection name="Put inline elements inside block level elements">
+
+        
+<p>Wrong:</p>
+
+        <source>&lt;section name=&quot;Downloads&quot;&gt;
+  &lt;a href=&quot;downloads.html&quot;&gt;Downloads&lt;/a&gt;
+&lt;/section&gt;</source>
+
+        
+<p>Correct:</p>
+
+        <source>&lt;section name=&quot;Downloads&quot;&gt;
+  &lt;p&gt;
+    &lt;a href=&quot;downloads.html&quot;&gt;Downloads&lt;/a&gt;
+  &lt;/p&gt;
+&lt;/section&gt;</source>
+
+        
+<p>
+          Typical inline elements are
+          <code>&lt;a&gt;</code>, <code>&lt;strong&gt;</code>,
+          <code>&lt;code&gt;</code>, <code>&lt;font&gt;</code>,
+          <code>&lt;br&gt;</code> and <code>&lt;img&gt;</code>.
+        </p>
+
+      </subsection>
+
+      <a name="Right_order_of_elements_in_properties"></a>
+      <subsection name="Right order of elements in &lt;properties&gt;">
+
+        
+<p>
+          The <code>&lt;title&gt;</code> element has to come before
+          <code>&lt;author&gt;</code>.
+        </p>
+
+      </subsection>
+
+      <a name="Dont_put_source_inside_paragraphs"></a>
+      <subsection name="Dont put &lt;source&gt; inside paragraphs">
+
+        
+<p>Wrong:</p>
+
+        <source>&lt;p&gt;
+  The following command executes the program:
+  &lt;source&gt;java -jar CoolApp.jar&lt;/source&gt;
+&lt;/p&gt;</source>
+
+        
+<p>Correct:</p>
+
+        <source>&lt;p&gt;
+  The following command executes the program:
+&lt;/p&gt;
+&lt;source&gt;java -jar CoolApp.jar&lt;/source&gt;</source>
+
+        
+<p>
+          However, you may put <code>&lt;source&gt;</code> elements inside
+          list items or table rows.
+        </p>
+
+      </subsection>
+
+    </section>
+
+  </body></document>
+
